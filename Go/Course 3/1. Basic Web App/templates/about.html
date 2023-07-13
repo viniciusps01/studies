@@ -1,0 +1,23 @@
+{{template "base" .}}
+
+{{define "content"}} 
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>About</h1>
+            <h3>About page</h>
+            <h6>{{index .Data "usernames"}}</h6>
+            <h6>
+                {{if ne (index .Data "remote_ip") ""}}
+                    Your remote IP Address is {{index .Data "remote_ip"}}
+                {{else}}
+                    I don't know you IP Address yet. Go to home page.
+                {{end}}
+            </h6>
+
+            <h6>{{index .Data "username"}}</h6>
+        </div>
+    </div>
+</div> 
+{{template "footer" .}}
+{{end}}
