@@ -1,0 +1,15 @@
+{{template "base" .}}
+
+{{define "content"}} 
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1>Hello Home Page!</h1>
+
+            <img src="/static/images/yard.jpg" width="500"/>
+
+            <h6>{{index .Data "usernames"}}</h6>
+        </div>
+    </div>
+</div>
+{{end}}
