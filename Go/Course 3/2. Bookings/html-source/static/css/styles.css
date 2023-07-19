@@ -1,0 +1,32 @@
+.carousel-bg {
+    aspect-ratio: 1;
+    padding: 1em;
+    background-color: black;
+    border-radius: 100%;
+}
+
+.carousel-caption {
+    background-color: #00000077;
+    border-radius: 10px;
+}
+
+.my-footer {
+    background-color: #876b44;
+    color: #e3dacf;
+}
+
+.datepicker {
+    z-index: 9999;
+}
+
+.carousel-bg {
+    aspect-ratio: 1;
+    padding: 1em;
+    background-color: black;
+    border-radius: 100%;
+}
+
+.carousel-caption {
+    background-color: #00000077;
+    border-radius: 10px;
+}
