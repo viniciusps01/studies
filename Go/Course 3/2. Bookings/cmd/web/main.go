@@ -1,8 +1,8 @@
 package main
 
 import (
-	"app/pkg/config"
-	"app/pkg/handlers"
+	"app/internals/config"
+	"app/internals/handlers"
 	"fmt"
 	"net/http"
 	"time"

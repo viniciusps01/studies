@@ -1,19 +1,21 @@
 package render
 
 import (
+	"app/internals/config"
+	"app/internals/models"
 	"app/pkg/cache"
-	"app/pkg/config"
-	"app/pkg/models"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/justinas/nosurf"
 )
 
-func RenderTemplate(w http.ResponseWriter, filename string, config *config.AppConfig, templateData *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, r *http.Request, filename string, config *config.AppConfig, templateData *models.TemplateData) {
 	filepath := "../../templates/" + filename
-
+	templateData.CSRFToken = nosurf.Token(r)
 	var template *template.Template
 
 	if config.UseCache {

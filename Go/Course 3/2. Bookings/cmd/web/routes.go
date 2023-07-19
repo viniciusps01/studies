@@ -1,8 +1,8 @@
 package main
 
 import (
-	"app/pkg/config"
-	"app/pkg/handlers"
+	"app/internals/config"
+	"app/internals/handlers"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -25,7 +25,19 @@ func routes(app *config.AppConfig) http.Handler {
 
 	router.Get("/about", http.HandlerFunc(handlers.About))
 
-	router.Get("/hello-felix", http.HandlerFunc(handlers.HelloFelix))
+	router.Get("/contact", http.HandlerFunc(handlers.Contact))
+
+	router.Get("/search-availability", http.HandlerFunc(handlers.SearchAvailability))
+
+	router.Post("/search-availability", http.HandlerFunc(handlers.SearchAvailabilityPost))
+
+	router.Post("/search-availability-json", http.HandlerFunc(handlers.AvailabilityJson))
+
+	router.Get("/make-reservation", http.HandlerFunc(handlers.MakeReservation))
+
+	router.Get("/majors-suite", http.HandlerFunc(handlers.MajorsSuite))
+
+	router.Get("/generals-quarters", http.HandlerFunc(handlers.GeneralsQuarters))
 
 	return router
 }

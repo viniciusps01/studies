@@ -1,0 +1,47 @@
+{{template "base" .}}
+
+{{define "content"}}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <img class="img-fluid img-thumbnail rounded-top" src="static/images/yard-1.jpg"
+                alt="General's quarters photo" />
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col text-center">
+            <h1 class="text-center mt-5 mb-3">Major's Suite</h1>
+            <p>Welcome to Fort Yard Bed and Breakfast Welcome to Fort Yard Bed and Breakfast Welcome to Fort Yard Bed
+                Welcome to Fort Yard Bed and Breakfast Welcome to Fort Yard Bed and Breakfast Welcome to Fort Yard Bed
+                Welcome to Fort Yard Bed and Breakfast Welcome to Fort Yard Bed and Breakfast Welcome to Fort Yard
+                Welcome to Fort Yard Bed and Breakfast Welcome to Fort Yard Bed and BreakfastWelcome to Fort Yard Bed
+                and
+                Breakfast
+                Welcome to Fort Yard Bed and Breakfast Welcome to Fort Yard Bed and BreakfastWelcome to Fort Yard Bed
+                and
+                Breakfast
+                Welcome to Fort Yard Bed and Breakfast Welcome to Fort Yard Bed and Breakfast Welcome to Fort Yard Bed
+                and
+                Breakfast
+            </p>
+
+            <button id="search-availability" class="btn btn-success">Check Availability</button>
+        </div>
+    </div>
+</div>
+
+{{end}}
+
+{{define "js"}}
+<script>
+    let searchButton = document.getElementById("search-availability")
+    searchButton.addEventListener("click", function () {
+        getReservationDates({
+            CSRFToken: "{{.CSRFToken}}"
+        })
+    })
+</script>
+{{end}}
