@@ -1,0 +1,47 @@
+{{template "base" .}}
+
+{{define "content"}}
+
+<div class="container">
+
+    {{$reservation := index .Data "reservation"}}
+
+    <div class="row">
+        <div class="col text-center">
+            <h1 class="text-center mt-5 mb-3">Reservation Summary</h1>
+
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+
+            <hr>
+
+            <table class="table table-striped">
+                <thead>Reservation Summary</thead>
+                <tbody>
+                    <tr>
+                        <td>Name:</td>
+                        <td>{{$reservation.FirstName}} {{$reservation.LastName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Arrival:</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Departure:</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td>
+                        <td>{{$reservation.Email}}</td>
+                    </tr>
+                    <tr>
+                        <td>Phone:</td>
+                        <td>{{$reservation.Phone}}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+{{end}}

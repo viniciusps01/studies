@@ -16,6 +16,9 @@ import (
 func RenderTemplate(w http.ResponseWriter, r *http.Request, filename string, config *config.AppConfig, templateData *models.TemplateData) {
 	filepath := "../../templates/" + filename
 	templateData.CSRFToken = nosurf.Token(r)
+	templateData.Flash = config.Session.PopString(r.Context(), "flash")
+	templateData.Warning = config.Session.PopString(r.Context(), "warning")
+	templateData.Error = config.Session.PopString(r.Context(), "error")
 	var template *template.Template
 
 	if config.UseCache {

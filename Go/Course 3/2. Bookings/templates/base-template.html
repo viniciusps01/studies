@@ -115,7 +115,22 @@
                 text: message
             })
         }
+
+        {{ with .Flash}}
+        alertError("{{.}}")
+        {{ end }}
+
+        {{ with .Warning}}
+        alertError("{{.}}")
+        {{ end }}
+
+        {{ with .Error}}
+        alertError("{{.}}")
+        {{ end }}
+
     </script>
+
+
 
     {{block "js" .}} {{end}}
 

@@ -28,12 +28,12 @@ func routes(app *config.AppConfig) http.Handler {
 	router.Get("/contact", http.HandlerFunc(handlers.Contact))
 
 	router.Get("/search-availability", http.HandlerFunc(handlers.SearchAvailability))
-
 	router.Post("/search-availability", http.HandlerFunc(handlers.SearchAvailabilityPost))
-
 	router.Post("/search-availability-json", http.HandlerFunc(handlers.AvailabilityJson))
 
 	router.Get("/make-reservation", http.HandlerFunc(handlers.MakeReservation))
+	router.Post("/make-reservation", http.HandlerFunc(handlers.MakeReservationPost))
+	router.Get("/reservation-summary", http.HandlerFunc(handlers.ReservationSummary))
 
 	router.Get("/majors-suite", http.HandlerFunc(handlers.MajorsSuite))
 
