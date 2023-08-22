@@ -3,10 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"app/internals/config"
+	"app/internals/error_response"
 	"app/internals/forms"
 	"app/internals/models"
 	"app/internals/render"
@@ -66,7 +66,7 @@ func AvailabilityJson(w http.ResponseWriter, r *http.Request) {
 	json, err := json.Marshal(data)
 
 	if err != nil {
-		w.Write([]byte(fmt.Sprint("Error: ", err)))
+		error_response.ServerError(appConfig, w, err)
 		return
 	}
 
@@ -101,7 +101,7 @@ func MakeReservation(w http.ResponseWriter, r *http.Request) {
 
 func MakeReservationPost(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		log.Println(err)
+		error_response.ServerError(appConfig, w, err)
 		return
 	}
 

@@ -18,7 +18,7 @@ func routes(app *config.AppConfig) http.Handler {
 	router.Use(CSRFcheck)
 	router.Use(middleware.Recoverer)
 
-	fs := http.FileServer(http.Dir("../../static"))
+	fs := http.FileServer(http.Dir("static"))
 	router.Handle("/static/*", http.StripPrefix("/static", fs))
 
 	router.Get("/", http.HandlerFunc(handlers.Home))

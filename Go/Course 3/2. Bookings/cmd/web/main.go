@@ -3,6 +3,7 @@ package main
 import (
 	"app/internals/config"
 	"app/internals/handlers"
+	"app/internals/loggers"
 	"app/internals/models"
 	"encoding/gob"
 	"fmt"
@@ -11,7 +12,10 @@ import (
 	"time"
 )
 
-const portNumber = 3000
+const (
+	portNumber    = 3000
+	templatesPath = "templates/"
+)
 
 var app config.AppConfig
 
@@ -36,7 +40,8 @@ func main() {
 }
 
 func run() error {
-	app = config.New()
+	l := loggers.New()
+	app = config.New(templatesPath, l.InfoLogger, l.ErrorLogger)
 	app.UseCache = false
 	app.InProduction = false
 	handlers.SetUpHandlersConfig(&app)

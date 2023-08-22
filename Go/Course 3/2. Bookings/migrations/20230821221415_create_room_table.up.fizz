@@ -1,0 +1,7 @@
+create_table("rooms") {
+  t.Column("id", "integer", {"primary":true, "unique": true})
+  t.Column("room_name", "string", {})
+  t.Column("room_id", "integer", {})
+
+  t.ForeignKey("room_id", {"rooms": ["id"]}, {"on_delete": "cascade"})
+}

@@ -6,7 +6,6 @@ import (
 	"app/pkg/cache"
 	"fmt"
 	"html/template"
-	"log"
 	"net/http"
 	"path/filepath"
 
@@ -14,7 +13,7 @@ import (
 )
 
 func RenderTemplate(w http.ResponseWriter, r *http.Request, filename string, config *config.AppConfig, templateData *models.TemplateData) {
-	filepath := "../../templates/" + filename
+	filepath := config.TemplatesPath + filename
 	templateData.CSRFToken = nosurf.Token(r)
 	templateData.Flash = config.Session.PopString(r.Context(), "flash")
 	templateData.Warning = config.Session.PopString(r.Context(), "warning")
@@ -30,8 +29,7 @@ func RenderTemplate(w http.ResponseWriter, r *http.Request, filename string, con
 		return
 	}
 
-	log.Println("Reading template from disk")
-	template, err := readTemplateFromDisk(filepath)
+	template, err := readTemplateFromDisk(config.TemplatesPath, filepath)
 
 	if err != nil {
 		fmt.Println("Error:", err)
@@ -52,14 +50,14 @@ func renderTemplate(w http.ResponseWriter, template *template.Template, template
 	}
 }
 
-func readTemplateFromDisk(filepath string) (*template.Template, error) {
+func readTemplateFromDisk(templatesPath string, filepath string) (*template.Template, error) {
 	template, err := template.ParseFiles(filepath)
 
 	if err != nil {
 		return template, err
 	}
 
-	hasTemplates, err := hasTemplateFiles()
+	hasTemplates, err := hasTemplateFiles(templatesPath)
 
 	if err != nil {
 		return template, err
@@ -69,7 +67,7 @@ func readTemplateFromDisk(filepath string) (*template.Template, error) {
 		return template, nil
 	}
 
-	template, err = template.ParseGlob("../../templates/*-template.html")
+	template, err = template.ParseGlob(templatesPath + "*-template.html")
 
 	if err != nil {
 		return template, err
@@ -78,8 +76,8 @@ func readTemplateFromDisk(filepath string) (*template.Template, error) {
 	return template, nil
 }
 
-func hasTemplateFiles() (bool, error) {
-	matches, err := filepath.Glob("../../templates/*-template.html")
+func hasTemplateFiles(templatesPath string) (bool, error) {
+	matches, err := filepath.Glob(templatesPath + "*-template.html")
 
 	if err != nil {
 		return false, err
