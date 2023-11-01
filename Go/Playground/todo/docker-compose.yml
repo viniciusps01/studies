@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  air:
+    image: cosmtrek/air:v1.49.0
+    working_dir: /app
+    ports:
+      - 3000:3000
+    depends_on:
+      db_migrate:
+        condition: service_completed_successfully
+    volumes:
+      - .:/app
+
+  app:
+    build: .
+    ports:
+      - 3000:3000
+    depends_on: 
+      db_migrate:
+        condition: service_completed_successfully
+  
+  db_migrate:
+    container_name: db_migrate
+    image: migrate/migrate:4
+    volumes: 
+      - ./migrations:/migrations
+    entrypoint: ["migrate", "-path", "/migrations", "-database", "postgresql://todo:todo@postgres_db:5432/todo?sslmode=disable", "up"]
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    container_name: postgres_db
+    image: postgres
+    environment:
+      POSTGRES_DB: todo
+      POSTGRES_USER: todo
+      POSTGRES_PASSWORD: todo
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+    
