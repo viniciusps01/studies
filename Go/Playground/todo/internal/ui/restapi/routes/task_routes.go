@@ -3,12 +3,14 @@ package routes
 import (
 	"github.com/go-chi/chi/v5"
 	"github.com/viniciusps01/internal/ui/restapi/handler"
+	"github.com/viniciusps01/internal/ui/restapi/middleware"
 )
 
 func taskRoutes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Route("/", func(r chi.Router) {
+		r.Use(middleware.Auth)
 		r.Post("/", handler.CreateTaskHandler)
 		r.Get("/", handler.ReadAllTasksHandler)
 

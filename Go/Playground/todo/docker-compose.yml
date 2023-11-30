@@ -32,7 +32,7 @@ services:
 
   db:
     container_name: postgres_db
-    image: postgres
+    image: postgres:16.0
     environment:
       POSTGRES_DB: todo
       POSTGRES_USER: todo

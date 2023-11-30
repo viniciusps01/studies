@@ -1,18 +1,18 @@
 package apperrors
 
-type ValidationError struct {
+type BadRequestError struct {
 	Message string
 }
 
-func (e ValidationError) Error() string {
+func (e BadRequestError) Error() string {
 	return e.Message
 }
 
-type DatabaseError struct {
+type InternalServerError struct {
 	Message string
 }
 
-func (e DatabaseError) Error() string {
+func (e InternalServerError) Error() string {
 	return e.Message
 }
 
@@ -21,6 +21,14 @@ type AuthorizationError struct {
 }
 
 func (e AuthorizationError) Error() string {
+	return e.Message
+}
+
+type AuthenticationError struct {
+	Message string
+}
+
+func (e AuthenticationError) Error() string {
 	return e.Message
 }
 

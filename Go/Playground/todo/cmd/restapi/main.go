@@ -8,13 +8,16 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 
 	"github.com/viniciusps01/cmd/app"
+	"github.com/viniciusps01/internal/ui/restapi/handler"
+	"github.com/viniciusps01/internal/ui/restapi/middleware"
 	"github.com/viniciusps01/internal/ui/restapi/routes"
 )
 
 func main() {
 	app := app.New()
 
-	routes.SetUpRoutes(app)
+	handler.SetUp(app)
+	middleware.SetUp(app)
 
 	defer app.Conn.Close()
 

@@ -2,6 +2,7 @@ package validator
 
 import (
 	"fmt"
+	"regexp"
 )
 
 type ValidationResult struct {
@@ -56,4 +57,16 @@ func ValidateRange(key, value string, min, max int) *string {
 	}
 
 	return nil
+}
+
+func ValidateEmail(key, value string) *string {
+	pattern := `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
+	re := regexp.MustCompile(pattern)
+
+	if ok := re.Match([]byte(value)); ok {
+		return nil
+	}
+
+	r := key + ": invalid"
+	return &r
 }

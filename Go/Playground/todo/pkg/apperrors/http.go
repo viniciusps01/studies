@@ -13,16 +13,22 @@ func (e HttpError) Error() string {
 
 func HttpErrorFrom(err error) *HttpError {
 	switch err.(type) {
-	case ValidationError:
+	case BadRequestError:
 		return &HttpError{
 			Message: err.Error(),
 			Status:  http.StatusBadRequest,
 		}
 
-	case DatabaseError:
+	case InternalServerError:
 		return &HttpError{
 			Message: err.Error(),
 			Status:  http.StatusInternalServerError,
+		}
+
+	case AuthenticationError:
+		return &HttpError{
+			Message: err.Error(),
+			Status:  http.StatusUnauthorized,
 		}
 
 	case AuthorizationError:

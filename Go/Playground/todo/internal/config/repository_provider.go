@@ -1,7 +1,11 @@
 package config
 
-import "github.com/viniciusps01/internal/infra/repository"
+import (
+	user_repo "github.com/viniciusps01/internal/feature/auth/repository"
+	task_repo "github.com/viniciusps01/internal/feature/task/repository"
+)
 
 type RepositoryProvider struct {
-	TaskRepository repository.ITaskRepository
+	TaskRepository task_repo.ITaskRepository
+	AuthRepository user_repo.IAuthRepository
 }

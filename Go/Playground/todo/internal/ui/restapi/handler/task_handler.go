@@ -6,11 +6,10 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/viniciusps01/internal/usecase"
+	usecase "github.com/viniciusps01/internal/feature/task/use_case"
 )
 
 func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
-
 	var input usecase.CreateTaskInputDTO
 	err := json.NewDecoder(r.Body).Decode(&input)
 
@@ -20,19 +19,22 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	authUser := getAuthUser(r.Context())
+	input.UserID = authUser.ID
+
 	u := usecase.NewCreateTask(appConfig.RepositoryProvider.TaskRepository)
 
 	out, err := u.Exec(input)
 
 	if err != nil {
-		sendAPIError(w, err)
+		SendAPIError(w, err)
 		return
 	}
 
 	json, err := json.Marshal(out)
 
 	if err != nil {
-		sendAPIError(w, err)
+		SendAPIError(w, err)
 		return
 	}
 
@@ -53,17 +55,20 @@ func ReadTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	authUser := getAuthUser(r.Context())
+	input.UserID = authUser.ID
+
 	out, err := usecase.NewReadTaskUseCase(appConfig.RepositoryProvider.TaskRepository).Exec(input)
 
 	if err != nil {
-		sendAPIError(w, err)
+		SendAPIError(w, err)
 		return
 	}
 
 	json, err := json.Marshal(out)
 
 	if err != nil {
-		sendAPIError(w, err)
+		SendAPIError(w, err)
 		return
 	}
 
@@ -92,12 +97,15 @@ func UpdateTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	authUser := getAuthUser(r.Context())
+	input.UserID = authUser.ID
+
 	u := usecase.NewUpdateTaskUseCase(appConfig.RepositoryProvider.TaskRepository)
 
 	out, err := u.Exec(input)
 
 	if err != nil {
-		sendAPIError(w, err)
+		SendAPIError(w, err)
 		return
 	}
 
@@ -126,37 +134,42 @@ func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	authUser := getAuthUser(r.Context())
+	input.UserID = authUser.ID
+
 	u := usecase.NewDeleteTaskUseCase(appConfig.RepositoryProvider.TaskRepository)
 
-	out, err := u.Exec(input)
+	err = u.Exec(input)
 
 	if err != nil {
-		sendAPIError(w, err)
-		return
-	}
-
-	json, err := json.Marshal(out)
-
-	if err != nil {
-		status := http.StatusInternalServerError
-		http.Error(w, "failed to parse output", status)
+		SendAPIError(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(json)
 }
 
 func ReadAllTasksHandler(w http.ResponseWriter, r *http.Request) {
 	input := usecase.ReadAllTaskInputDTO{}
+
+	authUser := getAuthUser(r.Context())
+	input.UserID = authUser.ID
+
+	if limit, err := strconv.Atoi((r.URL.Query().Get("limit"))); err == nil {
+		input.Limit = &limit
+	}
+
+	if offset, err := strconv.Atoi((r.URL.Query().Get("offset"))); err == nil {
+		input.Offset = &offset
+	}
 
 	u := usecase.NewReadAllTaskUseCase(appConfig.RepositoryProvider.TaskRepository)
 
 	out, err := u.Exec(input)
 
 	if err != nil {
-		sendAPIError(w, err)
+		SendAPIError(w, err)
 	}
 
 	json, err := json.Marshal(out)

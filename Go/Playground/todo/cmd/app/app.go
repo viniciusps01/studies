@@ -9,7 +9,8 @@ import (
 
 	"github.com/viniciusps01/internal/config"
 	"github.com/viniciusps01/internal/environment"
-	"github.com/viniciusps01/internal/infra/repository"
+	auth_repo "github.com/viniciusps01/internal/feature/auth/repository"
+	task_repo "github.com/viniciusps01/internal/feature/task/repository"
 )
 
 func New() *config.AppConfig {
@@ -35,7 +36,8 @@ func New() *config.AppConfig {
 	}
 
 	r := &config.RepositoryProvider{
-		TaskRepository: repository.NewTaskRepositoryPostgres(conn),
+		TaskRepository: task_repo.NewTaskRepositoryPostgres(conn),
+		AuthRepository: auth_repo.NewAuthRepositoryPostgres(conn),
 	}
 
 	app := &config.AppConfig{

@@ -1,11 +1,10 @@
-build:
-	docker-compose build
-
-air:
-	docker-compose up air
-
-up: build
-	docker-compose up app
+init:dev
 
 down:
 	docker-compose down
+
+build:down
+	docker-compose build
+
+dev:down
+	docker-compose up air
