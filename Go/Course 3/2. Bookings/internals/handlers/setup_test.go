@@ -2,9 +2,12 @@ package handlers
 
 import (
 	"app/internals/config"
+	"app/internals/driver"
 	"app/internals/loggers"
 	"app/internals/models"
+	"app/internals/repository/dbrepo"
 	"encoding/gob"
+	"log"
 	"net/http"
 	"os"
 	"testing"
@@ -32,7 +35,16 @@ func getRoutes() http.Handler {
 	app.Session.Cookie.Persist = true
 	app.Session.Cookie.SameSite = http.SameSiteLaxMode
 	app.Session.Cookie.Secure = app.InProduction
-	SetUpHandlersConfig(&app)
+
+	conn, err := driver.ConnectSql("host=localhost port=6000 dbname=bookings user=bookings password=bookings")
+
+	if err != nil {
+		log.Fatal("can not connect to database", err)
+	}
+
+	db := dbrepo.NewPostgresRepo(conn.SQL, &app)
+
+	SetUpHandlersConfig(&app, &db)
 
 	router := chi.NewRouter()
 

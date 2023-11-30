@@ -10,34 +10,37 @@ import (
 	"app/internals/forms"
 	"app/internals/models"
 	"app/internals/render"
+	"app/internals/repository"
+	"app/internals/repository/dbrepo"
 )
 
-var appConfig *config.AppConfig
+var repo repository.Repository
 
-func SetUpHandlersConfig(c *config.AppConfig) {
-	appConfig = c
+func SetUpHandlersConfig(c *config.AppConfig, dbrepo *dbrepo.DatabaseRepo) {
+	repo.App = c
+	repo.DB = dbrepo
 }
 
 func Home(w http.ResponseWriter, r *http.Request) {
 	td := models.TemplateData{}
-	render.RenderTemplate(w, r, "index.html", appConfig, &td)
+	render.RenderTemplate(w, r, "index.html", repo.App, &td)
 }
 
 func About(w http.ResponseWriter, r *http.Request) {
 	td := models.TemplateData{}
-	render.RenderTemplate(w, r, "about.html", appConfig, &td)
+	render.RenderTemplate(w, r, "about.html", repo.App, &td)
 }
 
 func Contact(w http.ResponseWriter, r *http.Request) {
 	td := models.TemplateData{}
 
-	render.RenderTemplate(w, r, "contact.html", appConfig, &td)
+	render.RenderTemplate(w, r, "contact.html", repo.App, &td)
 }
 
 func SearchAvailability(w http.ResponseWriter, r *http.Request) {
 	td := models.TemplateData{}
 
-	render.RenderTemplate(w, r, "search-availability.html", appConfig, &td)
+	render.RenderTemplate(w, r, "search-availability.html", repo.App, &td)
 }
 
 func SearchAvailabilityPost(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +69,7 @@ func AvailabilityJson(w http.ResponseWriter, r *http.Request) {
 	json, err := json.Marshal(data)
 
 	if err != nil {
-		error_response.ServerError(appConfig, w, err)
+		error_response.ServerError(repo.App, w, err)
 		return
 	}
 
@@ -77,13 +80,13 @@ func AvailabilityJson(w http.ResponseWriter, r *http.Request) {
 func MajorsSuite(w http.ResponseWriter, r *http.Request) {
 	td := models.TemplateData{}
 
-	render.RenderTemplate(w, r, "majors-suite.html", appConfig, &td)
+	render.RenderTemplate(w, r, "majors-suite.html", repo.App, &td)
 }
 
 func GeneralsQuarters(w http.ResponseWriter, r *http.Request) {
 	td := models.TemplateData{}
 
-	render.RenderTemplate(w, r, "generals-quarters.html", appConfig, &td)
+	render.RenderTemplate(w, r, "generals-quarters.html", repo.App, &td)
 }
 
 func MakeReservation(w http.ResponseWriter, r *http.Request) {
@@ -96,12 +99,12 @@ func MakeReservation(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	render.RenderTemplate(w, r, "make-reservation.html", appConfig, &td)
+	render.RenderTemplate(w, r, "make-reservation.html", repo.App, &td)
 }
 
 func MakeReservationPost(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
-		error_response.ServerError(appConfig, w, err)
+		error_response.ServerError(repo.App, w, err)
 		return
 	}
 
@@ -130,19 +133,19 @@ func MakeReservationPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !form.Valid() {
-		render.RenderTemplate(w, r, "make-reservation.html", appConfig, &td)
+		render.RenderTemplate(w, r, "make-reservation.html", repo.App, &td)
 		return
 	}
 
-	appConfig.Session.Put(r.Context(), "reservation", reservation)
+	repo.App.Session.Put(r.Context(), "reservation", reservation)
 	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
 }
 
 func ReservationSummary(w http.ResponseWriter, r *http.Request) {
-	reservation := appConfig.Session.Get(r.Context(), "reservation")
+	reservation := repo.App.Session.Get(r.Context(), "reservation")
 
 	if reservation == nil {
-		appConfig.Session.Put(r.Context(), "error", "Can't get reservation from session")
+		repo.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
@@ -153,6 +156,6 @@ func ReservationSummary(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	render.RenderTemplate(w, r, "reservation-summary.html", appConfig, &td)
+	render.RenderTemplate(w, r, "reservation-summary.html", repo.App, &td)
 
 }

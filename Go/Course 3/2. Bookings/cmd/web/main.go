@@ -2,9 +2,11 @@ package main
 
 import (
 	"app/internals/config"
+	"app/internals/driver"
 	"app/internals/handlers"
 	"app/internals/loggers"
 	"app/internals/models"
+	"app/internals/repository/dbrepo"
 	"encoding/gob"
 	"fmt"
 	"log"
@@ -20,11 +22,16 @@ const (
 var app config.AppConfig
 
 func main() {
-	err := run()
+	conn, err := run()
 
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	defer conn.SQL.Close()
+
+	db := dbrepo.NewPostgresRepo(conn.SQL, &app)
+	handlers.SetUpHandlersConfig(&app, &db)
 
 	host := fmt.Sprintf(":%v", portNumber)
 
@@ -39,12 +46,11 @@ func main() {
 
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 	l := loggers.New()
 	app = config.New(templatesPath, l.InfoLogger, l.ErrorLogger)
 	app.UseCache = false
 	app.InProduction = false
-	handlers.SetUpHandlersConfig(&app)
 
 	gob.Register(models.Reservation{})
 	app.Session.Lifetime = time.Hour * 24
@@ -52,5 +58,15 @@ func run() error {
 	app.Session.Cookie.SameSite = http.SameSiteLaxMode
 	app.Session.Cookie.Secure = app.InProduction
 
-	return nil
+	fmt.Println("Connecting to the database")
+	conn, err := driver.ConnectSql("host=localhost port=6000 dbname=bookings user=bookings password=bookings")
+
+	if err != nil {
+		log.Fatal("can not connect to database", err)
+		return nil, err
+	}
+
+	fmt.Println("Connected to the database")
+
+	return conn, nil
 }

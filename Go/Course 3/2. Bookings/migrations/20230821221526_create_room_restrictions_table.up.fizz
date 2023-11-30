@@ -10,3 +10,8 @@ create_table("room_restrictions") {
   t.ForeignKey("restriction_id", {"restrictions": ["id"]}, {"on_delete": "cascade"})
   t.ForeignKey("reservation_id", {"reservations": ["id"]}, {"on_delete": "cascade"})
 }
+
+add_index("room_restrictions", ["start_date", "end_date"], {})
+add_index("room_restrictions", "room_id", {})
+add_index("room_restrictions", "restriction_id", {})
+add_index("room_restrictions", "reservation_id", {})

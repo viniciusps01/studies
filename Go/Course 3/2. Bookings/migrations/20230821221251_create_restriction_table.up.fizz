@@ -2,3 +2,5 @@ create_table("restrictions") {
   t.Column("id", "integer", {"primary":true, "unique": true})
   t.Column("restriction_name", "string", {})
 }
+
+add_index("restrictions", "restriction_name", {})
