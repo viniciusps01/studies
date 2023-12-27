@@ -1,4 +1,4 @@
-package repository
+package data_source
 
 import (
 	"context"
@@ -16,17 +16,17 @@ const (
 	defaultOffset = 0
 )
 
-type AuthRepositoryPostgres struct {
+type AuthDataSourcePostgres struct {
 	conn *sql.Conn
 }
 
-func NewAuthRepositoryPostgres(c *sql.Conn) AuthRepositoryPostgres {
-	return AuthRepositoryPostgres{
+func NewAuthDataSourcePostgres(c *sql.Conn) AuthDataSourcePostgres {
+	return AuthDataSourcePostgres{
 		conn: c,
 	}
 }
 
-func (r AuthRepositoryPostgres) Create(u entity.User) (*entity.User, error) {
+func (r AuthDataSourcePostgres) Create(u entity.User) (*entity.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
 
 	defer cancel()
@@ -52,7 +52,7 @@ func (r AuthRepositoryPostgres) Create(u entity.User) (*entity.User, error) {
 	return &u, nil
 }
 
-func (r AuthRepositoryPostgres) readUser(param, value string) (*entity.User, error) {
+func (r AuthDataSourcePostgres) readUser(param, value string) (*entity.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
 
 	defer cancel()
@@ -85,19 +85,19 @@ func (r AuthRepositoryPostgres) readUser(param, value string) (*entity.User, err
 	return &user, nil
 }
 
-func (r AuthRepositoryPostgres) Read(ID string) (*entity.User, error) {
+func (r AuthDataSourcePostgres) Read(ID string) (*entity.User, error) {
 	return r.readUser("id", ID)
 }
 
-func (r AuthRepositoryPostgres) ReadUserByEmail(email string) (*entity.User, error) {
+func (r AuthDataSourcePostgres) ReadUserByEmail(email string) (*entity.User, error) {
 	return r.readUser("email", email)
 }
 
-func (r AuthRepositoryPostgres) Update(user entity.User) (*entity.User, error) {
+func (r AuthDataSourcePostgres) Update(user entity.User) (*entity.User, error) {
 	return nil, nil
 }
 
-func (r AuthRepositoryPostgres) Delete(ID string) error {
+func (r AuthDataSourcePostgres) Delete(ID string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
 
 	defer cancel()
@@ -124,7 +124,7 @@ func (r AuthRepositoryPostgres) Delete(ID string) error {
 	return nil
 }
 
-func (r AuthRepositoryPostgres) ReadAllUsers(limit, offset *int) (*[]entity.User, error) {
+func (r AuthDataSourcePostgres) ReadAllUsers(limit, offset *int) (*[]entity.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
 	defer cancel()
 

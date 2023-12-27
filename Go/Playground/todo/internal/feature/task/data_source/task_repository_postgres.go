@@ -1,4 +1,4 @@
-package repository
+package data_source
 
 import (
 	"context"
@@ -13,19 +13,19 @@ const (
 	defaultOffset = 0
 )
 
-type TaskRepositoryPostgres struct {
+type TaskDataSourcePostgres struct {
 	conn *sql.Conn
 }
 
-func NewTaskRepositoryPostgres(conn *sql.Conn) *TaskRepositoryPostgres {
-	r := &TaskRepositoryPostgres{
+func NewTaskDataSourcePostgres(conn *sql.Conn) *TaskDataSourcePostgres {
+	r := &TaskDataSourcePostgres{
 		conn: conn,
 	}
 
 	return r
 }
 
-func (r *TaskRepositoryPostgres) Create(t entity.Task) (int64, error) {
+func (r *TaskDataSourcePostgres) Create(t entity.Task) (int64, error) {
 	var id int64
 
 	q := "INSERT INTO task(user_id, title, description, done) VALUES ($1, $2, $3, $4) RETURNING id"
@@ -43,7 +43,7 @@ func (r *TaskRepositoryPostgres) Create(t entity.Task) (int64, error) {
 	return id, nil
 }
 
-func (r *TaskRepositoryPostgres) Read(ID int64, userID string) (*entity.Task, error) {
+func (r *TaskDataSourcePostgres) Read(ID int64, userID string) (*entity.Task, error) {
 	q := "SELECT id, user_id, title, description, done FROM task WHERE id=$1 AND user_id=$2"
 	res := r.conn.QueryRowContext(context.TODO(), q, ID, userID)
 
@@ -66,7 +66,7 @@ func (r *TaskRepositoryPostgres) Read(ID int64, userID string) (*entity.Task, er
 	return task, nil
 }
 
-func (r *TaskRepositoryPostgres) Update(t entity.Task) error {
+func (r *TaskDataSourcePostgres) Update(t entity.Task) error {
 	q := "UPDATE task SET title=$1, description=$2, done=$3 WHERE id=$4 AND user_id=$5"
 	_, err := r.conn.ExecContext(context.TODO(), q,
 		t.Title,
@@ -83,7 +83,7 @@ func (r *TaskRepositoryPostgres) Update(t entity.Task) error {
 	return nil
 }
 
-func (r *TaskRepositoryPostgres) Delete(ID int64, userID string) error {
+func (r *TaskDataSourcePostgres) Delete(ID int64, userID string) error {
 	q := "DELETE FROM task WHERE id=$1 AND user_id=$2 returning id"
 	res := r.conn.QueryRowContext(context.TODO(), q, ID, userID)
 
@@ -106,7 +106,7 @@ func (r *TaskRepositoryPostgres) Delete(ID int64, userID string) error {
 	return nil
 }
 
-func (r *TaskRepositoryPostgres) ReadAll(userID string, limit, offset *int) ([]*entity.Task, error) {
+func (r *TaskDataSourcePostgres) ReadAll(userID string, limit, offset *int) ([]*entity.Task, error) {
 	if limit == nil {
 		l := defaultLimit
 		limit = &l

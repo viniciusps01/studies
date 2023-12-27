@@ -9,7 +9,9 @@ import (
 
 	"github.com/viniciusps01/internal/config"
 	"github.com/viniciusps01/internal/environment"
+	auth_ds "github.com/viniciusps01/internal/feature/auth/data_source"
 	auth_repo "github.com/viniciusps01/internal/feature/auth/repository"
+	task_ds "github.com/viniciusps01/internal/feature/task/data_source"
 	task_repo "github.com/viniciusps01/internal/feature/task/repository"
 )
 
@@ -35,9 +37,14 @@ func New() *config.AppConfig {
 		os.Exit(1)
 	}
 
+	ds := &config.DataSourceProvider{
+		TaskDataSource: task_ds.NewTaskDataSourcePostgres(conn),
+		AuthDataSource: auth_ds.NewAuthDataSourcePostgres(conn),
+	}
+
 	r := &config.RepositoryProvider{
-		TaskRepository: task_repo.NewTaskRepositoryPostgres(conn),
-		AuthRepository: auth_repo.NewAuthRepositoryPostgres(conn),
+		TaskRepository: task_repo.NewTaskRepository(ds.TaskDataSource),
+		AuthRepository: auth_repo.NewAuthRepository(ds.AuthDataSource),
 	}
 
 	app := &config.AppConfig{
