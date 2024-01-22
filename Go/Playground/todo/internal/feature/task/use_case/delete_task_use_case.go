@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	repository "github.com/viniciusps01/internal/feature/task/repository"
+	repository "github.com/viniciusps01/todo/internal/feature/task/repository"
 )
 
 type DeleteTaskInputDTO struct {

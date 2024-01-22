@@ -9,8 +9,9 @@ import (
 )
 
 type Environment struct {
-	Server ServerConfig
-	DBpath string
+	Server   ServerConfig
+	DBpath   string
+	RedisUrl string
 }
 
 func Load() *Environment {
@@ -25,10 +26,12 @@ func Load() *Environment {
 	}
 
 	dbPath := os.Getenv(dbPathKey)
+	redisUrl := os.Getenv(redisUrlKey)
 
 	env := &Environment{
-		Server: *serverConfig,
-		DBpath: dbPath,
+		Server:   *serverConfig,
+		DBpath:   dbPath,
+		RedisUrl: redisUrl,
 	}
 
 	return env

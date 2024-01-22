@@ -3,9 +3,9 @@ package usecase
 import (
 	"strings"
 
-	"github.com/viniciusps01/internal/feature/task/repository"
-	"github.com/viniciusps01/pkg/apperrors"
-	"github.com/viniciusps01/pkg/validator"
+	"github.com/viniciusps01/todo/internal/feature/task/repository"
+	"github.com/viniciusps01/todo/pkg/apperrors"
+	"github.com/viniciusps01/todo/pkg/validator"
 )
 
 type UpdateTaskInputDTO struct {

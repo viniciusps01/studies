@@ -1,6 +1,6 @@
 package middleware
 
-import "github.com/viniciusps01/internal/config"
+import "github.com/viniciusps01/todo/internal/config"
 
 var appConfig *config.AppConfig
 

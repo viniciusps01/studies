@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/viniciusps01/internal/feature/task/entity"
+import "github.com/viniciusps01/todo/internal/feature/task/entity"
 
 type ITaskRepository interface {
 	Create(task entity.Task) (int64, error)

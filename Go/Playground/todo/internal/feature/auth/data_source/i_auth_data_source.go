@@ -1,6 +1,6 @@
 package data_source
 
-import "github.com/viniciusps01/internal/feature/auth/entity"
+import "github.com/viniciusps01/todo/internal/feature/auth/entity"
 
 type IAuthDataSource interface {
 	Create(user entity.User) (*entity.User, error)

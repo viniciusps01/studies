@@ -6,10 +6,10 @@ import (
 	"net/http"
 	"strconv"
 
-	usecase "github.com/viniciusps01/internal/feature/auth/use_case"
+	usecase "github.com/viniciusps01/todo/internal/feature/auth/use_case"
 
-	"github.com/viniciusps01/pkg/apperrors"
-	"github.com/viniciusps01/pkg/security"
+	"github.com/viniciusps01/todo/pkg/apperrors"
+	"github.com/viniciusps01/todo/pkg/security"
 )
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {

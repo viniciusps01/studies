@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"github.com/viniciusps01/internal/feature/task/data_source"
-	"github.com/viniciusps01/internal/feature/task/entity"
+	"github.com/viniciusps01/todo/internal/feature/task/data_source"
+	"github.com/viniciusps01/todo/internal/feature/task/entity"
 )
 
 type TaskRepository struct {

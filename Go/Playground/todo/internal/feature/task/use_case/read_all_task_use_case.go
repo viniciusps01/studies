@@ -1,6 +1,6 @@
 package usecase
 
-import "github.com/viniciusps01/internal/feature/task/repository"
+import "github.com/viniciusps01/todo/internal/feature/task/repository"
 
 type ReadAllTaskInputDTO struct {
 	UserID string `json:"user_id"`

@@ -7,12 +7,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/viniciusps01/internal/config"
-	"github.com/viniciusps01/internal/environment"
-	auth_ds "github.com/viniciusps01/internal/feature/auth/data_source"
-	auth_repo "github.com/viniciusps01/internal/feature/auth/repository"
-	task_ds "github.com/viniciusps01/internal/feature/task/data_source"
-	task_repo "github.com/viniciusps01/internal/feature/task/repository"
+	"github.com/viniciusps01/todo/internal/config"
+	"github.com/viniciusps01/todo/internal/environment"
+	auth_ds "github.com/viniciusps01/todo/internal/feature/auth/data_source"
+	auth_repo "github.com/viniciusps01/todo/internal/feature/auth/repository"
+	task_ds "github.com/viniciusps01/todo/internal/feature/task/data_source"
+	task_repo "github.com/viniciusps01/todo/internal/feature/task/repository"
+	infra "github.com/viniciusps01/todo/internal/infra/cache"
 )
 
 func New() *config.AppConfig {
@@ -37,6 +38,10 @@ func New() *config.AppConfig {
 		os.Exit(1)
 	}
 
+	redisDb := infra.NewRedisCache(env.RedisUrl)
+
+	authCache := auth_ds.NewAuthCacheDataSource(redisDb)
+
 	ds := &config.DataSourceProvider{
 		TaskDataSource: task_ds.NewTaskDataSourcePostgres(conn),
 		AuthDataSource: auth_ds.NewAuthDataSourcePostgres(conn),
@@ -44,13 +49,14 @@ func New() *config.AppConfig {
 
 	r := &config.RepositoryProvider{
 		TaskRepository: task_repo.NewTaskRepository(ds.TaskDataSource),
-		AuthRepository: auth_repo.NewAuthRepository(ds.AuthDataSource),
+		AuthRepository: auth_repo.NewAuthRepository(ds.AuthDataSource, authCache),
 	}
 
 	app := &config.AppConfig{
 		RepositoryProvider: r,
 		Env:                env,
 		Conn:               conn,
+		RedisCache:         redisDb,
 	}
 
 	return app

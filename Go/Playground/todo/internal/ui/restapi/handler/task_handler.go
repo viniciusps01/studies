@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
-	usecase "github.com/viniciusps01/internal/feature/task/use_case"
+	usecase "github.com/viniciusps01/todo/internal/feature/task/use_case"
 )
 
 func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {

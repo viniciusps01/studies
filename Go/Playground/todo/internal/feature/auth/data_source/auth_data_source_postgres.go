@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/viniciusps01/internal/feature/auth/entity"
-	"github.com/viniciusps01/pkg/apperrors"
+	"github.com/viniciusps01/todo/internal/feature/auth/entity"
+	"github.com/viniciusps01/todo/pkg/apperrors"
 )
 
 const (

@@ -4,8 +4,8 @@ import (
 	"context"
 	"database/sql"
 
-	"github.com/viniciusps01/internal/feature/task/entity"
-	"github.com/viniciusps01/pkg/apperrors"
+	"github.com/viniciusps01/todo/internal/feature/task/entity"
+	"github.com/viniciusps01/todo/pkg/apperrors"
 )
 
 const (

@@ -7,10 +7,10 @@ import (
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 
-	"github.com/viniciusps01/cmd/app"
-	"github.com/viniciusps01/internal/ui/restapi/handler"
-	"github.com/viniciusps01/internal/ui/restapi/middleware"
-	"github.com/viniciusps01/internal/ui/restapi/routes"
+	"github.com/viniciusps01/todo/cmd/app"
+	"github.com/viniciusps01/todo/internal/ui/restapi/handler"
+	"github.com/viniciusps01/todo/internal/ui/restapi/middleware"
+	"github.com/viniciusps01/todo/internal/ui/restapi/routes"
 )
 
 func main() {
@@ -20,6 +20,7 @@ func main() {
 	middleware.SetUp(app)
 
 	defer app.Conn.Close()
+	defer app.RedisCache.Close()
 
 	fmt.Printf("Server is up on %v:%d\n",
 		app.Env.Server.Host,

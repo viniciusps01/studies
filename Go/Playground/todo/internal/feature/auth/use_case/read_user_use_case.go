@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/viniciusps01/internal/feature/auth/repository"
+	"github.com/viniciusps01/todo/internal/feature/auth/repository"
 )
 
 type ReadUserInputDTO struct {

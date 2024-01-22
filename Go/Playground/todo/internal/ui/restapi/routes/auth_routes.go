@@ -2,8 +2,8 @@ package routes
 
 import (
 	"github.com/go-chi/chi/v5"
-	"github.com/viniciusps01/internal/ui/restapi/handler"
-	"github.com/viniciusps01/internal/ui/restapi/middleware"
+	"github.com/viniciusps01/todo/internal/ui/restapi/handler"
+	"github.com/viniciusps01/todo/internal/ui/restapi/middleware"
 )
 
 func authRoutes() chi.Router {

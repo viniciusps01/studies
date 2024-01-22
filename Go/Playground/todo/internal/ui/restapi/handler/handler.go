@@ -4,11 +4,11 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/viniciusps01/internal/config"
-	usecase "github.com/viniciusps01/internal/feature/auth/use_case"
-	"github.com/viniciusps01/internal/ui/restapi/middleware"
+	"github.com/viniciusps01/todo/internal/config"
+	usecase "github.com/viniciusps01/todo/internal/feature/auth/use_case"
+	"github.com/viniciusps01/todo/internal/ui/restapi/middleware"
 
-	"github.com/viniciusps01/pkg/apperrors"
+	"github.com/viniciusps01/todo/pkg/apperrors"
 )
 
 var appConfig *config.AppConfig

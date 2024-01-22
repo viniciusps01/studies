@@ -1,17 +1,25 @@
 package repository
 
 import (
-	"github.com/viniciusps01/internal/feature/auth/data_source"
-	"github.com/viniciusps01/internal/feature/auth/entity"
+	"context"
+	"time"
+
+	"github.com/viniciusps01/todo/internal/feature/auth/data_source"
+	"github.com/viniciusps01/todo/internal/feature/auth/entity"
 )
 
 type AuthRepository struct {
-	ds data_source.IAuthDataSource
+	ds    data_source.IAuthDataSource
+	cache data_source.IAuthCacheDataSource
 }
 
-func NewAuthRepository(ds data_source.IAuthDataSource) AuthRepository {
+func NewAuthRepository(
+	ds data_source.IAuthDataSource,
+	c data_source.IAuthCacheDataSource,
+) AuthRepository {
 	return AuthRepository{
-		ds: ds,
+		ds:    ds,
+		cache: c,
 	}
 }
 
@@ -20,15 +28,58 @@ func (r AuthRepository) Create(u entity.User) (*entity.User, error) {
 }
 
 func (r AuthRepository) Read(ID string) (*entity.User, error) {
-	return r.ds.Read(ID)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
+
+	defer cancel()
+
+	user, err := r.cache.GetUser(ctx, ID)
+
+	if err == nil {
+		return user, nil
+	}
+
+	user, err = r.ds.Read(ID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	r.cache.PutUser(ctx, *user)
+
+	return user, nil
 }
 
 func (r AuthRepository) ReadUserByEmail(email string) (*entity.User, error) {
-	return r.ds.ReadUserByEmail(email)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
+
+	defer cancel()
+
+	user, err := r.ds.ReadUserByEmail(email)
+
+	if err != nil {
+		return nil, err
+	}
+
+	r.cache.PutUser(ctx, *user)
+
+	return user, nil
+
 }
 
 func (r AuthRepository) Update(user entity.User) (*entity.User, error) {
-	return r.ds.Update(user)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*60)
+
+	defer cancel()
+
+	uUser, err := r.ds.Update(user)
+
+	if err != nil {
+		return nil, err
+	}
+
+	r.cache.PutUser(ctx, *uUser)
+
+	return uUser, nil
 }
 
 func (r AuthRepository) Delete(ID string) error {

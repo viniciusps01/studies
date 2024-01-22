@@ -1,6 +1,6 @@
 package repository
 
-import "github.com/viniciusps01/internal/feature/auth/entity"
+import "github.com/viniciusps01/todo/internal/feature/auth/entity"
 
 type IAuthRepository interface {
 	Create(user entity.User) (*entity.User, error)

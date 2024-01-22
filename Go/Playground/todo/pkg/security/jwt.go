@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
-	"github.com/viniciusps01/pkg/apperrors"
+	"github.com/viniciusps01/todo/pkg/apperrors"
 )
 
 const jwtKey = "JWT_KEY"

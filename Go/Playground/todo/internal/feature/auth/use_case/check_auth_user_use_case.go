@@ -1,10 +1,10 @@
 package usecase
 
 import (
-	"github.com/viniciusps01/internal/feature/auth/entity"
-	"github.com/viniciusps01/internal/feature/auth/repository"
-	"github.com/viniciusps01/pkg/apperrors"
-	"github.com/viniciusps01/pkg/security"
+	"github.com/viniciusps01/todo/internal/feature/auth/entity"
+	"github.com/viniciusps01/todo/internal/feature/auth/repository"
+	"github.com/viniciusps01/todo/pkg/apperrors"
+	"github.com/viniciusps01/todo/pkg/security"
 )
 
 type CheckAuthInputDTO struct {
